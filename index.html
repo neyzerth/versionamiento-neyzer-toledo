@@ -1,44 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example Data Table with IndexedDB</title>
-
+    <title>Product List · Neyzer Toledo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h1>Example Product List Web App</h1>
-
-    <div class="container">
-
-        <div class="formContainer">
-            <label for="name">Product Name:</label>
-            <input type="text" id="name" placeholder="Enter product name">
-            
-            <label for="price">Price:</label>
-            <input type="number" id="price" placeholder="Enter product price" min="1">
-            
-            <button id="addProduct">Add Product</button>
+    <header class="app-header">
+        <div>
+            <h1>Product List</h1>
+            <p class="subtitle">Web app with IndexedDB · Neyzer Toledo</p>
         </div>
+        <p class="counter" id="counter">0 products</p>
+    </header>
 
-      
-        <table id="productsTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-          
-            </tbody>
-        </table>
-    </div>
+    <main class="container">
+        <section class="formContainer">
+            <h2>New product</h2>
+            <label for="name">Product name</label>
+            <input type="text" id="name" placeholder="e.g. Ground coffee">
 
+            <label for="price">Price</label>
+            <input type="number" id="price" placeholder="0.00" min="0.01" step="0.01">
 
+            <button id="addProduct">Add product</button>
+        </section>
+
+        <section class="tableContainer">
+            <table id="productsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p class="empty-state" id="emptyState">No products yet.</p>
+            <p class="total" id="total">Total: $0.00</p>
+        </section>
+    </main>
+
+    <footer class="app-footer">Neyzer Toledo · UTT · Software development</footer>
     <script src="functions.js"></script>
 </body>
+
 </html>
