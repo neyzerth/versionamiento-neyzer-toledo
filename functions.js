@@ -2,16 +2,16 @@
 let db;
 const request = indexedDB.open('exampleProductDB', 1);
 
-request.onerror = function(event) {
+request.onerror = function (event) {
     console.error("Database error: ", event.target.error);
 };
 
-request.onsuccess = function(event) {
+request.onsuccess = function (event) {
     db = event.target.result;
     loadProductTable(); // Load products after the database is opened
 };
 
-request.onupgradeneeded = function(event) {
+request.onupgradeneeded = function (event) {
     db = event.target.result;
     db.createObjectStore('products', { keyPath: 'id' });
 };
@@ -23,7 +23,7 @@ function loadProductTable() {
 
     const request = store.getAll();
 
-    request.onsuccess = function(event) {
+    request.onsuccess = function (event) {
         const products = event.target.result;
         const tableBody = document.querySelector('#productsTable tbody');
         tableBody.innerHTML = ''; // Clear the table before adding new products
@@ -40,7 +40,16 @@ function loadProductTable() {
             tableBody.appendChild(row);
         });
 
-    //Add event listeners for delete buttons
+        //Elemento adicional: contador, total y estado vacío (Tarea de versionamiento)
+        document.getElementById('counter').textContent =
+            products.length + (products.length === 1 ? ' product' : ' products');
+
+        const total = products.reduce((sum, product) => sum + Number(product.price), 0);
+        document.getElementById('total').textContent = 'Total: $' + total.toFixed(2);
+
+        document.getElementById('emptyState').style.display = products.length ? 'none' : 'block';
+
+        //Add event listeners for delete buttons
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', deleteProduct);
         });
@@ -64,7 +73,7 @@ function addProduct() {
     //Get/Read the products
     const getAllRequest = store.getAll();
 
-    getAllRequest.onsuccess = function(event) {
+    getAllRequest.onsuccess = function (event) {
         const products = event.target.result;
         const newProduct = {
             id: products.length > 0 ? products[products.length - 1].id + 1 : 1, // Assign an incremental ID
@@ -72,19 +81,21 @@ function addProduct() {
             price: price
         };
 
-    //Add/Create the new product to the DB
+        //Add/Create the new product to the DB
         store.add(newProduct);
         //Clear the form fields
         document.getElementById('name').value = '';
         document.getElementById('price').value = '';
 
-    //Update the table with the new product
+        //Update the table with the new product
         loadProductTable();
     };
 }
 
 //Delete a product
 function deleteProduct(event) {
+    if (!confirm('Delete this product?')) return;
+
     const productId = parseInt(event.target.getAttribute('data-id')); // Get the product ID from the button's data attribute
     const transaction = db.transaction(['products'], 'readwrite');
     const store = transaction.objectStore('products');
